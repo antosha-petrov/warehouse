@@ -2,7 +2,7 @@ import sys
 import time
 
 if sys.platform == 'win32':
-    import mock.RPi.GPIO as GPIO
+    import Python.mock.RPi.GPIO as GPIO
 else:
     import RPi.GPIO as GPIO
 
