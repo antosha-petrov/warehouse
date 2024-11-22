@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="WarehouseApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:WarehouseApp"
+    Shell.FlyoutBehavior="Flyout"
+    Title="WarehouseApp">
+
+    <TabBar>
+        <ShellContent Icon="history_icone.png" Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}"></ShellContent>
+        <ShellContent Icon="home_icone.png" Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}"></ShellContent>
+        <ShellContent Icon="order_icone.png" Route="OrderPage" ContentTemplate="{DataTemplate local:OrderPage}"></ShellContent>
+    </TabBar>
+
+</Shell>
