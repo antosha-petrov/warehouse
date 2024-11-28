@@ -2,6 +2,43 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WarehouseApp.OrderPage"
-             Title="OrderPage">
+             Title="Новый заказ">
 
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25">
+            <Border BackgroundColor="#919191" Padding="10" Margin="25">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <HorizontalStackLayout Spacing="15">
+                    <Border BackgroundColor="#DDDDDD">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Image Source="prokladki.png" HeightRequest="120"/>
+                    </Border>
+                    <Border BackgroundColor="White" HorizontalOptions="CenterAndExpand">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Margin="10"  HorizontalOptions="FillAndExpand">
+                            <Label Text="Прокладки" HorizontalOptions="CenterAndExpand" TextColor="Black" FontSize="18"/>
+                            <Label Text="" VerticalOptions="FillAndExpand"/>
+                            <Border BackgroundColor="#919191">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <HorizontalStackLayout>
+                                    <ImageButton Source="minus.png" HeightRequest="15"/>
+                                    <Label Text="2" FontSize="25" TextColor="Black" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" WidthRequest="20"/>
+                                    <ImageButton Source="plus.png" HeightRequest="15"/>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
