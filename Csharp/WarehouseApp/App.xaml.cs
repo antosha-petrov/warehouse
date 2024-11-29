@@ -9,11 +9,7 @@
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            var page = new Window
-            {
-                Page = new MainPage()
-            };
-            return page;
+            return new Window(new AppShell());
         }
     }
 }
