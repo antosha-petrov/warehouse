@@ -2,155 +2,142 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WarehouseApp.OrderPage"
-             Title="Новый заказ">
+             xmlns:local="clr-namespace:WarehouseApp"
+             Title="История заказов"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="White" StatusBarStyle="DarkContent" />
+    </ContentPage.Behaviors>
+
+    <Shell.TitleView>
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Label Text="Заказ  " FontSize="28" HorizontalOptions="Center" TextColor="#512BD4" FontAttributes="Bold"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
 
     <ScrollView>
         <VerticalStackLayout
             Spacing="0">
-            <Border BackgroundColor="#ac99ea" Padding="10" Margin="15,0,15,15">
+            <Border BackgroundColor="#DFD8F7" Padding="8" Margin="15,0,15,15">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
-                <VerticalStackLayout Spacing="15">
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <Image Source="prokladki.png" HeightRequest="120"/>
-                    </Border>
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <Label Text="Прокладки" FontSize="24" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                    </Border>
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <HorizontalStackLayout>
-                            <Button Text="-" FontSize="25" TextColor="#DFD8F7" HorizontalOptions="StartAndExpand" WidthRequest="139"/>
-                            <Label Text="  2  " FontSize="37" TextColor="#512BD4" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                            <Button Text="+" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="EndAndExpand" WidthRequest="139"/>
-                        </HorizontalStackLayout>
-                    </Border>
-                </VerticalStackLayout>
+                <Label Text="Проверьте ваш заказ" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
             </Border>
             <Border BackgroundColor="#ac99ea" Padding="10" Margin="15,0,15,15">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="15">
-                    <Border BackgroundColor="#DFD8F7">
+                    <Border BackgroundColor="#DFD8F7" Padding="10">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
-                        <Image Source="bolt.png" HeightRequest="120"/>
+                        <HorizontalStackLayout Spacing="85">
+                            <Border BackgroundColor="#512BD4" Padding="10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Label Margin="15,0,15,0" Text="Прокладки" FontSize="22" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            </Border>
+                            <Border BackgroundColor="#512BD4" Padding="10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Label Margin="15,0,15,0" Text="2" FontSize="22" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            </Border>
+                        </HorizontalStackLayout>
                     </Border>
-                    <Border BackgroundColor="#DFD8F7">
+                    <Border BackgroundColor="#DFD8F7" Padding="10">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
-                        <Label Text="Болты" FontSize="24" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        <HorizontalStackLayout Spacing="135">
+                            <Border BackgroundColor="#512BD4" Padding="10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Label Margin="15,0,15,0" Text="Болты" FontSize="22" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            </Border>
+                            <Border BackgroundColor="#512BD4" Padding="10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Label Margin="15,0,15,0" Text="2" FontSize="22" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            </Border>
+                        </HorizontalStackLayout>
                     </Border>
-                    <Border BackgroundColor="#DFD8F7">
+                    <Border BackgroundColor="#DFD8F7" Padding="10">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
-                        <HorizontalStackLayout>
-                            <Button Text="-" FontSize="25" TextColor="#DFD8F7" HorizontalOptions="StartAndExpand" WidthRequest="139"/>
-                            <Label Text="  2  " FontSize="37" TextColor="#512BD4" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                            <Button Text="+" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="EndAndExpand" WidthRequest="139"/>
+                        <HorizontalStackLayout Spacing="139">
+                            <Border BackgroundColor="#512BD4" Padding="10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Label Margin="15,0,15,0" Text="Гайки" FontSize="22" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            </Border>
+                            <Border BackgroundColor="#512BD4" Padding="10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Label Margin="15,0,15,0" Text="2" FontSize="22" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            </Border>
+                        </HorizontalStackLayout>
+                    </Border>
+                    <Border BackgroundColor="#DFD8F7" Padding="10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <HorizontalStackLayout Spacing="128">
+                            <Border BackgroundColor="#512BD4" Padding="10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Label Margin="15,0,15,0" Text="Бруски" FontSize="22" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            </Border>
+                            <Border BackgroundColor="#512BD4" Padding="10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Label Margin="15,0,15,0" Text="2" FontSize="22" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            </Border>
+                        </HorizontalStackLayout>
+                    </Border>
+                    <Border BackgroundColor="#DFD8F7" Padding="10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <HorizontalStackLayout Spacing="123">
+                            <Border BackgroundColor="#512BD4" Padding="10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Label Margin="15,0,15,0" Text="Шайбы" FontSize="22" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            </Border>
+                            <Border BackgroundColor="#512BD4" Padding="10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Label Margin="15,0,15,0" Text="2" FontSize="22" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            </Border>
                         </HorizontalStackLayout>
                     </Border>
                 </VerticalStackLayout>
             </Border>
-            <Border BackgroundColor="#ac99ea" Padding="10" Margin="15,0,15,15">
+            <Border Margin="15,0,15,15">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20" />
+                    <RoundRectangle CornerRadius="20"/>
                 </Border.StrokeShape>
-                <VerticalStackLayout Spacing="15">
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <Image Source="gayki.png" HeightRequest="120"/>
-                    </Border>
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <Label Text="Гайки" FontSize="24" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                    </Border>
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <HorizontalStackLayout>
-                            <Button Text="-" FontSize="25" TextColor="#DFD8F7" HorizontalOptions="StartAndExpand" WidthRequest="139"/>
-                            <Label Text="  2  " FontSize="37" TextColor="#512BD4" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                            <Button Text="+" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="EndAndExpand" WidthRequest="139"/>
-                        </HorizontalStackLayout>
-                    </Border>
-                </VerticalStackLayout>
+                <Button Text="Удалить все" BackgroundColor="Red" FontSize="22" TextColor="White" HorizontalOptions="FillAndExpand"/>
             </Border>
-            <Border BackgroundColor="#ac99ea" Padding="10" Margin="15,0,15,15">
+            <Border Margin="15,0,15,15">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20" />
+                    <RoundRectangle CornerRadius="20"/>
                 </Border.StrokeShape>
-                <VerticalStackLayout Spacing="15">
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <Image Source="brusok.png" HeightRequest="120"/>
-                    </Border>
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <Label Text="Бруски" FontSize="24" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                    </Border>
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <HorizontalStackLayout>
-                            <Button Text="-" FontSize="25" TextColor="#DFD8F7" HorizontalOptions="StartAndExpand" WidthRequest="139"/>
-                            <Label Text="  2  " FontSize="37" TextColor="#512BD4" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                            <Button Text="+" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="EndAndExpand" WidthRequest="139"/>
-                        </HorizontalStackLayout>
-                    </Border>
-                </VerticalStackLayout>
-            </Border>
-            <Border BackgroundColor="#ac99ea" Padding="10" Margin="15,0,15,15">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20" />
-                </Border.StrokeShape>
-                <VerticalStackLayout Spacing="15">
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <Image Source="shayba.png" HeightRequest="120"/>
-                    </Border>
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <Label Text="Шайбы" FontSize="24" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                    </Border>
-                    <Border BackgroundColor="#DFD8F7">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <HorizontalStackLayout>
-                            <Button Text="-" FontSize="25" TextColor="#DFD8F7" HorizontalOptions="StartAndExpand" WidthRequest="139"/>
-                            <Label Text="  2  " FontSize="37" TextColor="#512BD4" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                            <Button Text="+" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="EndAndExpand" WidthRequest="139"/>
-                        </HorizontalStackLayout>
-                    </Border>
-                </VerticalStackLayout>
+                <Button Text="Заказать" FontSize="22" TextColor="#DFD8F7" HorizontalOptions="FillAndExpand"/>
             </Border>
         </VerticalStackLayout>
     </ScrollView>

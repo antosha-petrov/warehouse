@@ -4,12 +4,12 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:WarehouseApp"
-    Shell.FlyoutBehavior="Flyout"
-    Title="WarehouseApp">
+    Shell.FlyoutBehavior="Disabled"
+    Title="Склад">
 
     <TabBar>
-        <ShellContent Icon="history_icone.png" Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}"></ShellContent>
         <ShellContent Icon="home_icone.png" Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}"></ShellContent>
+        <ShellContent Icon="history_icone.png" Route="HistoryPage" ContentTemplate="{DataTemplate local:HistoryPage}"></ShellContent>
         <ShellContent Icon="order_icone.png" Route="OrderPage" ContentTemplate="{DataTemplate local:OrderPage}"></ShellContent>
     </TabBar>
 
