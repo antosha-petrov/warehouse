@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WarehouseApp.View.Controls.CardControl"
+             BackgroundColor="#ac99ea"
+             Padding="10">
+    <ContentView.Content>
+        <VerticalStackLayout Spacing="15">
+            <Border BackgroundColor="#DFD8F7">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <Image Source="{Binding ImageSource}" HeightRequest="120"/>
+            </Border>
+            <Border BackgroundColor="#DFD8F7" Padding="10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <Label Text="{Binding Title}" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+            </Border>
+            <Border BackgroundColor="#DFD8F7">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <Grid>
+                    <!-- Определение одной строки -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Определение трёх столбцов с равным разделением -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Button Text="-" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="StartAndExpand" WidthRequest="120" Command="{Binding DecrementCommand}" />
+                    </Border>
+                    <Border BackgroundColor="#512BD4">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Label Text="{Binding Quantity}" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                    </Border>
+                    <Border>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Button Text="+" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="StartAndExpand" WidthRequest="120" Command="{Binding IncrementCommand}" />
+                    </Border>
+                </Grid>
+            </Border>
+        </VerticalStackLayout>
+    </ContentView.Content>
+</ContentView>

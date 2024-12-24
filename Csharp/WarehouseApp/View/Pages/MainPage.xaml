@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:WarehouseApp.View.Controls"
+             xmlns:vm="clr-namespace:WarehouseApp.ViewModel"
+             x:Class="WarehouseApp.MainPage"
+             Title="Главная"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="White" StatusBarStyle="DarkContent" />
+    </ContentPage.Behaviors>
+
+    <Shell.TitleView>
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Label Text="Главная  " FontSize="28" HorizontalOptions="Center" TextColor="#512BD4" FontAttributes="Bold"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <Border BackgroundColor="#DFD8F7" Padding="8" Margin="15,0,15,15">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Нет текущих заказов!" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                    <Label Text="Создайте новый заказ ниже" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                </VerticalStackLayout>
+            </Border>
+            <CollectionView ItemsSource="{Binding Items}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="15, 0, 15, 15">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="20"/>
+                            </Border.StrokeShape>
+                            <controls:CardControl BindingContext="{Binding}" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Border Margin="15,0,15,15">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20"/>
+                </Border.StrokeShape>
+                <Button Text="В корзину" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="FillAndExpand"/>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
