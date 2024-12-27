@@ -8,9 +8,9 @@
     Title="Склад">
 
     <TabBar>
-        <ShellContent Icon="home_icone.png" Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}"></ShellContent>
-        <ShellContent Icon="history_icone.png" Route="HistoryPage" ContentTemplate="{DataTemplate local:HistoryPage}"></ShellContent>
-        <ShellContent Icon="order_icone.png" Route="OrderPage" ContentTemplate="{DataTemplate local:OrderPage}"></ShellContent>
+        <ShellContent Icon="home_icone.png" Route="Main" ContentTemplate="{DataTemplate local:MainPage}"></ShellContent>
+        <ShellContent Icon="history_icone.png" Route="History" ContentTemplate="{DataTemplate local:HistoryPage}"></ShellContent>
+        <ShellContent Icon="order_icone.png" Route="Order" ContentTemplate="{DataTemplate local:OrderPage}"></ShellContent>
     </TabBar>
 
 </Shell>

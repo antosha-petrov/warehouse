@@ -23,35 +23,33 @@
                     <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
                 <Grid>
-                    <!-- Определение одной строки -->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <!-- Определение трёх столбцов с равным разделением -->
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Border>
+                    <Border Grid.Column="0">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
-                        <Button Text="-" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="StartAndExpand" WidthRequest="120" Command="{Binding DecrementCommand}" />
+                        <Button Text="-" FontSize="24" TextColor="#DFD8F7" Command="{Binding DecrementCommand}" />
                     </Border>
-                    <Border BackgroundColor="#512BD4">
+                    <Border Grid.Column="1" BackgroundColor="#512BD4" Margin="4, 0, 4, 0">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
                         <Label Text="{Binding Quantity}" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                     </Border>
-                    <Border>
+                    <Border Grid.Column="2">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
-                        <Button Text="+" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="StartAndExpand" WidthRequest="120" Command="{Binding IncrementCommand}" />
+                        <Button Text="+" FontSize="24" TextColor="#DFD8F7" Command="{Binding IncrementCommand}" />
                     </Border>
                 </Grid>
             </Border>

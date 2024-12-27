@@ -66,6 +66,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="View\Controls\CartListItemControl.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\Controls\CardControl.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

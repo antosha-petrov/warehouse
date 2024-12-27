@@ -5,6 +5,7 @@
         public App()
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(OrderPage), typeof(OrderPage));
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

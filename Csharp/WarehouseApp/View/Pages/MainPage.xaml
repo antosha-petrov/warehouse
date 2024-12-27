@@ -44,7 +44,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20"/>
                 </Border.StrokeShape>
-                <Button Text="В корзину" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="FillAndExpand"/>
+                <Button Text="В корзину" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="FillAndExpand" Clicked="OnOrderButtonClicked"/>
             </Border>
         </VerticalStackLayout>
     </ScrollView>
