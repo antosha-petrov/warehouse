@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using WarehouseApp.Model;
 
 namespace WarehouseApp.ViewModel
 {
@@ -11,16 +7,11 @@ namespace WarehouseApp.ViewModel
     {
         public ObservableCollection<CartListItemViewModel> Items { get; }
 
-        public OrderPageViewModel()
+        public OrderPageViewModel(IEnumerable<Component> components)
         {
-            Items = new ObservableCollection<CartListItemViewModel>
-        {
-            new CartListItemViewModel("Прокладки"),
-            new CartListItemViewModel("Болты"),
-            new CartListItemViewModel("Гайки"),
-            new CartListItemViewModel("Бруски"),
-            new CartListItemViewModel("Шайбы"),
-        };
+            Items = new ObservableCollection<CartListItemViewModel>(
+                components.Select(component => new CartListItemViewModel(component.Name, component))
+            );
         }
     }
 }

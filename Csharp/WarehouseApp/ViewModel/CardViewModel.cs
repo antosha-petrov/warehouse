@@ -1,38 +1,44 @@
 ﻿using System.Windows.Input;
+using WarehouseApp.Model;
 
-namespace WarehouseApp.ViewModel;
-
-public class CardViewModel : BindableObject
+namespace WarehouseApp.ViewModel
 {
-    private int _quantity;
-
-    public string ImageSource { get; set; }
-    public string Title { get; set; }
-
-    public int Quantity
+    public class CardViewModel : BindableObject
     {
-        get => _quantity;
-        set
+        private int _quantity;
+        public string ImageSource { get; set; }
+        public string Title { get; set; }
+
+ 
+        public Component Component { get; set; }
+
+        public int Quantity
         {
-            _quantity = value;
-            OnPropertyChanged();
+            get => _quantity;
+            set
+            {
+                _quantity = value;
+                Component.Quantity = value;
+                OnPropertyChanged();
+            }
         }
-    }
 
-    public ICommand IncrementCommand { get; }
-    public ICommand DecrementCommand { get; }
+        public ICommand IncrementCommand { get; }
+        public ICommand DecrementCommand { get; }
 
-    public CardViewModel(string title, string imageSource)
-    {
-        Title = title;
-        ImageSource = imageSource;
-        Quantity = 0;
-
-        IncrementCommand = new Command(() => Quantity++);
-        DecrementCommand = new Command(() =>
+        public CardViewModel(string title, string imageSource, Component component)
         {
-            if (Quantity > 0)
-                Quantity--;
-        });
+            Title = title;
+            ImageSource = imageSource;
+            Component = component;
+            Quantity = component.Quantity; 
+
+            IncrementCommand = new Command(() => Quantity++);
+            DecrementCommand = new Command(() =>
+            {
+                if (Quantity > 0)
+                    Quantity--;
+            });
+        }
     }
 }

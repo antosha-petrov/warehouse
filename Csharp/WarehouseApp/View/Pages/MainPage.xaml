@@ -24,7 +24,6 @@
                     <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Нет текущих заказов!" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                     <Label Text="Создайте новый заказ ниже" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                 </VerticalStackLayout>
             </Border>
