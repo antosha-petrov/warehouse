@@ -1,17 +1,33 @@
 ﻿using System.Collections.ObjectModel;
-using WarehouseApp.Model;
+using WarehouseApp.Services;
 
 namespace WarehouseApp.ViewModel
 {
     public class OrderPageViewModel
     {
-        public ObservableCollection<CartListItemViewModel> Items { get; }
+        public ObservableCollection<OrderCardViewModel> Items { get; }
 
-        public OrderPageViewModel(IEnumerable<Component> components)
+        public OrderPageViewModel()
         {
-            Items = new ObservableCollection<CartListItemViewModel>(
-                components.Select(component => new CartListItemViewModel(component.Name, component))
+            Items = new ObservableCollection<OrderCardViewModel>(
+                AppState.Instance.Goods
+                .Where(goods => goods.Quantity > 0)
+                .Select(goods => new OrderCardViewModel(goods))
             );
+        }
+
+        public void RefreshItems()
+        {
+            Items.Clear();
+
+            var updatedItems = AppState.Instance.Goods
+                .Where(goods => goods.Quantity > 0)
+                .Select(goods => new OrderCardViewModel(goods));
+
+            foreach (var item in updatedItems)
+            {
+                Items.Add(item); 
+            }
         }
     }
 }

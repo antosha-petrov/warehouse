@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using WarehouseApp.ViewModel;
+﻿using WarehouseApp.ViewModel;
 
 namespace WarehouseApp
 {
@@ -10,12 +9,6 @@ namespace WarehouseApp
             InitializeComponent();
             BindingContext = new MainPageViewModel();
         }
-
-        private async void OnOrderButtonClicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("//Order");
-        }
-
     }
 
 }

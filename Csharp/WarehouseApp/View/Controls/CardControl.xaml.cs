@@ -5,5 +5,5 @@ public partial class CardControl : ContentView
 	public CardControl()
 	{
 		InitializeComponent();
-	}
+    }
 }

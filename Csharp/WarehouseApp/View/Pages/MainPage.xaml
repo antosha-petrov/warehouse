@@ -43,7 +43,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20"/>
                 </Border.StrokeShape>
-                <Button Text="В корзину" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="FillAndExpand" Clicked="OnOrderButtonClicked"/>
+                <Button Command="{Binding NavigateToOrder}" Text="В корзину" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="FillAndExpand" />
             </Border>
         </VerticalStackLayout>
     </ScrollView>

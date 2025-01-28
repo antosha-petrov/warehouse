@@ -37,7 +37,7 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
-                        <Button Text="-" FontSize="24" TextColor="#DFD8F7" Command="{Binding DecrementCommand}" />
+                        <Button Text="-" FontSize="24" TextColor="#DFD8F7" Command="{Binding MinusCommand}" />
                     </Border>
                     <Border Grid.Column="1" BackgroundColor="#512BD4" Margin="4, 0, 4, 0">
                         <Border.StrokeShape>
@@ -49,7 +49,7 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
-                        <Button Text="+" FontSize="24" TextColor="#DFD8F7" Command="{Binding IncrementCommand}" />
+                        <Button Text="+" FontSize="24" TextColor="#DFD8F7" Command="{Binding PlusCommand}" />
                     </Border>
                 </Grid>
             </Border>

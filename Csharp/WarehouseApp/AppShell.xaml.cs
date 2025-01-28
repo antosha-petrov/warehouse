@@ -2,7 +2,7 @@
 {
     public partial class AppShell : Shell
     {
-        public AppShell(Services.ComponentService _componentService)
+        public AppShell()
         {
             InitializeComponent();
         }

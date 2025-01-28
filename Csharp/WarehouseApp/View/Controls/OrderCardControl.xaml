@@ -8,7 +8,7 @@
         </Border.StrokeShape>
         <VerticalStackLayout Padding="10" Spacing="10">
 
-            <Label Margin="15,0,15,0" Text="{Binding Name}" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+            <Label Margin="15,0,15,0" Text="{Binding Title}" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
 
             <Grid ColumnSpacing="5">
                 <Grid.RowDefinitions>
@@ -25,7 +25,7 @@
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="20" />
                     </Border.StrokeShape>
-                    <Button Text="-" FontSize="24" TextColor="#DFD8F7" Command="{Binding DecrementCommand}" />
+                    <Button Text="-" FontSize="24" TextColor="#DFD8F7" Command="{Binding MinusCommand}" />
                 </Border>
 
                 <Entry HorizontalTextAlignment="Center" Margin="15,0,15,0" Text="{Binding Quantity}" Grid.Column="1" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
@@ -34,7 +34,7 @@
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="20" />
                     </Border.StrokeShape>
-                    <Button Text="+" FontSize="24" TextColor="#DFD8F7" Command="{Binding IncrementCommand}" />
+                    <Button Text="+" FontSize="24" TextColor="#DFD8F7" Command="{Binding PlusCommand}" />
                 </Border>
             </Grid>
         </VerticalStackLayout>

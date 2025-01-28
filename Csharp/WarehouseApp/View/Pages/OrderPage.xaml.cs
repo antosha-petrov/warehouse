@@ -4,25 +4,19 @@ namespace WarehouseApp;
 
 public partial class OrderPage : ContentPage
 {
-	public OrderPage()
-	{
-		InitializeComponent();
+    public OrderPage()
+    {
+        InitializeComponent();
+        BindingContext = new OrderPageViewModel();
+    }
 
-        var mainPage = Application.Current?.Windows[0]?.Page as AppShell;
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
 
-        if (mainPage != null &&
-            mainPage.Items.FirstOrDefault() is FlyoutItem flyoutItem &&
-            flyoutItem.Items.FirstOrDefault() is ShellSection shellSection &&
-            shellSection.CurrentItem is ShellContent shellContent &&
-            shellContent.Content is MainPage mainPageInstance &&
-            mainPageInstance.BindingContext is MainPageViewModel mainPageViewModel)
+        if (BindingContext is OrderPageViewModel viewModel)
         {
-            var components = mainPageViewModel.GetComponents();
-            BindingContext = new OrderPageViewModel(components);
-        }
-        else
-        {
-            throw new InvalidOperationException("Unable to locate MainPage or its BindingContext.");
+            viewModel.RefreshItems();
         }
     }
 }

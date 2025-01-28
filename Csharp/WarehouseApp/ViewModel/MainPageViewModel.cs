@@ -1,5 +1,6 @@
-﻿using WarehouseApp.Model;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using WarehouseApp.Services;
 
 namespace WarehouseApp.ViewModel;
 
@@ -9,18 +10,13 @@ public class MainPageViewModel
 
     public MainPageViewModel()
     {
-        Items = new ObservableCollection<CardViewModel>
-        {
-            new CardViewModel("Прокладки", "prokladki.png", new Component("Прокладки")),
-            new CardViewModel("Болты", "bolt.png", new Component("Болты")),
-            new CardViewModel("Гайки", "gayki.png", new Component("Гайки")),
-            new CardViewModel("Бруски", "brusok.png", new Component("Бруски")),
-            new CardViewModel("Шайбы", "shayba.png", new Component("Шайбы")),
-        };
+        Items = new ObservableCollection<CardViewModel>(
+            AppState.Instance.Goods
+            .Select(goods => new CardViewModel(goods))
+        );
+
+        NavigateToOrder = new Command(() => Shell.Current.GoToAsync("//Order"));
     }
 
-    public IEnumerable<Component> GetComponents()
-    {
-        return Items.Select(item => item.Component);
-    }
+    public ICommand NavigateToOrder { get; }
 }

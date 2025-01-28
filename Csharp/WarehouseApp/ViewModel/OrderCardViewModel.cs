@@ -1,13 +1,13 @@
 ﻿using System.Windows.Input;
 using WarehouseApp.ViewModel;
 
-public class CardViewModel : ViewModelBase
+public class OrderCardViewModel : ViewModelBase
 {
     private readonly WarehouseApp.Model.Component linkedComponent;
 
-    public int Quantity 
+    public int Quantity
     {
-        get => linkedComponent.Quantity; 
+        get => linkedComponent.Quantity;
         set
         {
             linkedComponent.Quantity = value;
@@ -19,15 +19,15 @@ public class CardViewModel : ViewModelBase
 
     public string Title => linkedComponent.Name;
 
-    public CardViewModel(WarehouseApp.Model.Component linkedComponent)
+    public OrderCardViewModel(WarehouseApp.Model.Component linkedComponent)
     {
         this.linkedComponent = linkedComponent;
 
         PlusCommand = new Command(() => Quantity++);
-        MinusCommand = new Command(() => 
-        { 
-            if (Quantity > 0) 
-                Quantity--; 
+        MinusCommand = new Command(() =>
+        {
+            if (Quantity > 0)
+                Quantity--;
         });
     }
 
