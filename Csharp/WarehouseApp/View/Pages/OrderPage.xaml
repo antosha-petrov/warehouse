@@ -19,29 +19,20 @@
 
     <ScrollView>
         <VerticalStackLayout>
-            <Border BackgroundColor="#DFD8F7" Padding="8" Margin="15,0,15,15">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20" />
-                </Border.StrokeShape>
-                <Label Text="Проверьте ваш заказ" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-            </Border>
             <Border BackgroundColor="#ac99ea" Padding="0, 0, 0, 10" Margin="15,0,15,15">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
-                <CollectionView ItemsSource="{Binding Items}" >
+                <CollectionView ItemsSource="{Binding Items}">
+                    <CollectionView.EmptyView>
+                        <Label Text="Тут пока пусто :(" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="End" Margin="0, 5, 0, 0"/>
+                    </CollectionView.EmptyView>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <controls:CartListItemControl BindingContext="{Binding}" />
+                            <controls:OrderCardControl BindingContext="{Binding}" />
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </Border>
-            <Border Margin="15,0,15,15">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20"/>
-                </Border.StrokeShape>
-                <Button Text="Удалить все" BackgroundColor="Red" FontSize="22" TextColor="White" HorizontalOptions="FillAndExpand"/>
             </Border>
             <Border Margin="15,0,15,15">
                 <Border.StrokeShape>

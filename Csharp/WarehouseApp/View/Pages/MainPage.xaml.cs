@@ -1,14 +1,22 @@
 ﻿using WarehouseApp.ViewModel;
 
-namespace WarehouseApp
+namespace WarehouseApp;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    public MainPage()
     {
-        public MainPage()
-        {
-            InitializeComponent();
-            BindingContext = new MainPageViewModel();
-        }
+        InitializeComponent();
+        BindingContext = new MainPageViewModel();
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is MainPageViewModel viewModel)
+        {
+            viewModel.RefreshItems();
+        }
+    }
 }

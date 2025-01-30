@@ -2,51 +2,46 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WarehouseApp.View.Controls.HistoryCardControl">
-    <Border BackgroundColor="#DFD8F7" Margin="10, 10, 10, 0">
+    <Border BackgroundColor="#DFD8F7" Margin="0, 10, 0, 5">
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="20"/>
         </Border.StrokeShape>
 
-        <Grid ColumnSpacing="5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <VerticalStackLayout Spacing="10">
+            <Label Margin="15,0,15,0" Text="{Binding Title}" FontSize="22" TextColor="#512BD4" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
             
-            
-            <Border Grid.Column="1" BackgroundColor="#512BD4" Margin="4, 0, 4, 0">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20" />
-                </Border.StrokeShape>
-                <Label Text="{Binding Name}" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="Center" VerticalOptions="Center"/>
-            </Border>
+            <Grid ColumnSpacing="5" Margin="0, 0, 0, 5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <Border Grid.Column="1" BackgroundColor="#512BD4" Margin="4, 0, 4, 0">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20" />
-                </Border.StrokeShape>
-                <Label Text="{Binding Row}" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="Center" VerticalOptions="Center"/>
-            </Border>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="1" BackgroundColor="#512BD4" Margin="4, 0, 4, 0">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20" />
-                </Border.StrokeShape>
-                <Label Text="{Binding Rack}" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="Center" VerticalOptions="Center"/>
-            </Border>
+                <Border Grid.Column="0" BackgroundColor="#512BD4" Margin="4, 0, 4, 0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <Label Text="{Binding Rack}" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
 
-            <Border Grid.Column="1" BackgroundColor="#512BD4" Margin="4, 0, 4, 0">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20" />
-                </Border.StrokeShape>
-                <Label Text="{Binding Shell}" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="Center" VerticalOptions="Center"/>
-            </Border>
-        </Grid>
+                <Border Grid.Column="1" BackgroundColor="#512BD4" Margin="4, 0, 4, 0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <Label Text="{Binding Cell}" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
+
+                <Border Grid.Column="2" BackgroundColor="#512BD4" Margin="4, 0, 4, 0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <Label Text="{Binding Shelf}" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
+            </Grid>
+        </VerticalStackLayout>
     </Border>
 </ContentView>
