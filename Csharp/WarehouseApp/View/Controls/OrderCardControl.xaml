@@ -2,25 +2,37 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WarehouseApp.View.Controls.OrderCardControl">
+
+    <!-- Создание пользовательского элемента управления -->
     <Border BackgroundColor="#DFD8F7" Margin="10, 10, 10, 0">
+        
+        <!-- Скругление углов -->
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="20"/>
         </Border.StrokeShape>
+        
+        <!-- Содержимое элемента -->
         <VerticalStackLayout Padding="10" Spacing="10">
 
+            <!-- Название товара -->
             <Label Margin="15,0,15,0" Text="{Binding Title}" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
 
+            <!-- Сетка для элементов связанных с количеством товара -->
             <Grid ColumnSpacing="5">
+
+                <!-- Создание рядов сетки -->
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
+                <!-- Создание столбцов сетки -->
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
+                <!-- Кнопка минус -->
                 <Border Grid.Column="0">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="20" />
@@ -28,8 +40,10 @@
                     <Button Text="-" FontSize="24" TextColor="#DFD8F7" Command="{Binding MinusCommand}" />
                 </Border>
 
+                <!-- Количество -->
                 <Entry HorizontalTextAlignment="Center" Margin="15,0,15,0" Text="{Binding Quantity}" Grid.Column="1" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
 
+                <!-- Кнопка плюс -->
                 <Border Grid.Column="2">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="20" />

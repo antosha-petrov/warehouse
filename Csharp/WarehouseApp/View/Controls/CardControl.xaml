@@ -4,51 +4,74 @@
              x:Class="WarehouseApp.View.Controls.CardControl"
              BackgroundColor="#ac99ea"
              Padding="10">
+    
+    <!-- Создание пользовательского элемента управления -->
     <ContentView.Content>
         <VerticalStackLayout Spacing="15">
+            
+            <!-- Отображение картинки товара -->
             <Border BackgroundColor="#DFD8F7">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
                 <Image Source="{Binding ImageSource}" HeightRequest="120"/>
             </Border>
+            
+            <!-- Отображение названия товара -->
             <Border BackgroundColor="#DFD8F7" Padding="10">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
                 <Label Text="{Binding Title}" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
             </Border>
+            
+            <!-- Рамка для элементов связанных с количеством товара -->
             <Border BackgroundColor="#DFD8F7">
+                
+                <!-- Скругление углов -->
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
+
+                <!-- Сетка для элементов связанных с количеством товара -->
                 <Grid>
+                    
+                    <!-- Создание рядов сетки -->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-
+                     
+                    <!-- Создание столбцов сетки -->
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-
+                    
+                    <!-- Кнопка минус -->
                     <Border Grid.Column="0">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
+                        
                         <Button Text="-" FontSize="24" TextColor="#DFD8F7" Command="{Binding MinusCommand}" />
                     </Border>
+                    
+                    <!-- Количество -->
                     <Border Grid.Column="1" BackgroundColor="#512BD4" Margin="4, 0, 4, 0">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
+                        
                         <Label Text="{Binding Quantity}" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                     </Border>
+                    
+                    <!-- Кнопка плюс -->
                     <Border Grid.Column="2">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
+                        
                         <Button Text="+" FontSize="24" TextColor="#DFD8F7" Command="{Binding PlusCommand}" />
                     </Border>
                 </Grid>

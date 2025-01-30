@@ -7,26 +7,37 @@
              Title="Главная"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
+    <!-- Установка цвета и стиля строки состояния -->
     <ContentPage.Behaviors>
         <toolkit:StatusBarBehavior StatusBarColor="White" StatusBarStyle="DarkContent" />
     </ContentPage.Behaviors>
 
+    <!-- Установка заголовка страницы -->
     <Shell.TitleView>
         <HorizontalStackLayout HorizontalOptions="Center">
             <Label Text="Главная  " FontSize="28" HorizontalOptions="Center" TextColor="#512BD4" FontAttributes="Bold"/>
         </HorizontalStackLayout>
     </Shell.TitleView>
 
+    <!-- Содержимое страницы -->
     <ScrollView>
         <VerticalStackLayout>
+
+            <!-- Оформление надписи -->
             <Border BackgroundColor="#DFD8F7" Padding="8" Margin="15,0,15,15">
+
+                <!-- Скругление углов -->
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
+
+                <!-- Добавление текста -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Создайте новый заказ ниже" FontSize="22" TextColor="#2B0B98" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                 </VerticalStackLayout>
             </Border>
+
+            <!-- Отображение доступных для заказа товаров -->
             <CollectionView ItemsSource="{Binding Items}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -39,6 +50,8 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
+            <!-- Кнрпка для перехода в корзину -->
             <Border Margin="15,0,15,15">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20"/>
@@ -47,5 +60,4 @@
             </Border>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

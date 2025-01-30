@@ -2,10 +2,12 @@
 
 namespace WarehouseApp.Services
 {
+    // Локальный сервис приложения
     internal class AppState
     {
         private static readonly Lazy<AppState> instanceLazy = new Lazy<AppState>(() => new AppState());
 
+        // Конструктор класса
         private AppState()
         {
             Goods =
@@ -20,6 +22,7 @@ namespace WarehouseApp.Services
 
         public static AppState Instance => instanceLazy.Value;
 
+        // Коллекция товаров
         public IReadOnlyList<Component> Goods { get; }
     }
 }
