@@ -1,8 +1,8 @@
 namespace WarehouseApp.View.Controls;
 
-public partial class CartListItemControl : ContentView
+public partial class OrderCardControl : ContentView
 {
-    public CartListItemControl()
+    public OrderCardControl()
     {
         InitializeComponent();
     }

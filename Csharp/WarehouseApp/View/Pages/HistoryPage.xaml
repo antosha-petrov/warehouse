@@ -19,17 +19,53 @@
 
     <ScrollView>
         <VerticalStackLayout>
-            <Border BackgroundColor="#DFD8F7" Padding="8" Margin="15,0,15,15">
+            <Border BackgroundColor="#ac99ea" Padding="8" Margin="15,0,15,15">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
-                <CollectionView ItemsSource="{Binding Items}" >
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <controls:CartListItemControl BindingContext="{Binding}" />
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                <VerticalStackLayout>
+                    <Grid ColumnSpacing="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+
+                        <Border Grid.Column="0" BackgroundColor="#DFD8F7" Margin="4, 0, 4, 0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="20" />
+                            </Border.StrokeShape>
+                            <Label Text="Ряд" FontSize="24" TextColor="#512BD4" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+
+                        <Border Grid.Column="1" BackgroundColor="#DFD8F7" Margin="4, 0, 4, 0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="20" />
+                            </Border.StrokeShape>
+                            <Label Text="Стелаж" FontSize="24" TextColor="#512BD4" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+
+                        <Border Grid.Column="2" BackgroundColor="#DFD8F7" Margin="4, 0, 4, 0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="20" />
+                            </Border.StrokeShape>
+                            <Label Text="Полка" FontSize="24" TextColor="#512BD4" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding Items}" Margin="0, 20, 0, 0">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <controls:HistoryCardControl BindingContext="{Binding}" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
             </Border>
         </VerticalStackLayout>
     </ScrollView>

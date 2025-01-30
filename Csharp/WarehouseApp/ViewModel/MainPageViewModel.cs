@@ -18,5 +18,18 @@ public class MainPageViewModel
         NavigateToOrder = new Command(() => Shell.Current.GoToAsync("//Order"));
     }
 
+    public void RefreshItems()
+    {
+        Items.Clear();
+
+        var updatedItems = AppState.Instance.Goods
+            .Select(goods => new CardViewModel(goods));
+
+        foreach (var item in updatedItems)
+        {
+            Items.Add(item);
+        }
+    }
+
     public ICommand NavigateToOrder { get; }
 }
