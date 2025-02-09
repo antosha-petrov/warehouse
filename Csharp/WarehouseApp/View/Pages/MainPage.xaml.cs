@@ -12,14 +12,13 @@ public partial class MainPage : ContentPage
     }
 
     // Метод, срабатывающий при каждом заходе на страницу
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
 
         if (BindingContext is MainPageViewModel viewModel)
         {
-            // Обновление элементов страницы
-            viewModel.RefreshItems();
+            await viewModel.RefreshItemsAsync();
         }
     }
 }

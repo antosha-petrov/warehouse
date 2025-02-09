@@ -1,8 +1,9 @@
-﻿using WarehouseApp.ViewModel;
+﻿using Models;
+using WarehouseApp.ViewModel;
 
 public class HistoryCardViewModel : ViewModelBase
 {
-    private readonly WarehouseApp.Model.Component linkedComponent;
+    private readonly OrderItem linkedComponent;
 
     public int Rack
     {
@@ -34,9 +35,9 @@ public class HistoryCardViewModel : ViewModelBase
         }
     }
 
-    public string Title => linkedComponent.Name;
+    public string Title => linkedComponent.Goods.Name;
 
-    public HistoryCardViewModel(WarehouseApp.Model.Component linkedComponent)
+    public HistoryCardViewModel(OrderItem linkedComponent)
     {
         this.linkedComponent = linkedComponent;
     }

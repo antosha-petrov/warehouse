@@ -1,32 +1,66 @@
 ﻿using System.Collections.ObjectModel;
-using WarehouseApp.Services;
+using System.Windows.Input;
 
-namespace WarehouseApp.ViewModel;
-
-public class OrderPageViewModel
+namespace WarehouseApp.ViewModel
 {
-    public ObservableCollection<OrderCardViewModel> Items { get; }
-
-    public OrderPageViewModel()
+    public class OrderPageViewModel
     {
-        Items = new ObservableCollection<OrderCardViewModel>(
-            AppState.Instance.Goods
-            .Where(goods => goods.Quantity > 0)
-            .Select(goods => new OrderCardViewModel(goods))
-        );
-    }
+        public ObservableCollection<OrderCardViewModel> Items { get; }
+        public ICommand CreateOrder { get; }
 
-    public void RefreshItems()
-    {
-        Items.Clear();
-
-        var updatedItems = AppState.Instance.Goods
-            .Where(goods => goods.Quantity > 0)
-            .Select(goods => new OrderCardViewModel(goods));
-
-        foreach (var item in updatedItems)
+        public OrderPageViewModel()
         {
-            Items.Add(item); 
+            Items = new ObservableCollection<OrderCardViewModel>();
+            CreateOrder = new Command(async () => await CreateOrderAsync());
+        }
+
+        // Асинхронный метод для загрузки элементов
+        public async Task LoadItemsAsync()
+        {
+            var appState = await AppState.GetInstanceAsync(); // Получаем инстанс AppState асинхронно
+
+            var updatedItems = appState.Goods?
+                .Where(goods => goods.Quantity > 0)
+                .Select(goods => new OrderCardViewModel(goods)) ?? Enumerable.Empty<OrderCardViewModel>();
+
+            Items.Clear();
+            foreach (var item in updatedItems)
+            {
+                Items.Add(item);
+            }
+        }
+
+        // Асинхронный метод для обновления элементов
+        public async Task RefreshItemsAsync()
+        {
+            var appState = await AppState.GetInstanceAsync(); // Получаем инстанс AppState асинхронно
+
+            var updatedItems = appState.Goods?
+                .Where(goods => goods.Quantity > 0)
+                .Select(goods => new OrderCardViewModel(goods)) ?? Enumerable.Empty<OrderCardViewModel>();
+
+            Items.Clear();
+            foreach (var item in updatedItems)
+            {
+                Items.Add(item);
+            }
+        }
+
+        // Асинхронный метод для создания заказа
+        private async Task CreateOrderAsync()
+        {
+            var appState = await AppState.GetInstanceAsync(); // Получаем инстанс AppState асинхронно
+            var quantities = GetItemsCount(appState);
+            await appState.EditOrderAsync(quantities); // Создаем заказ асинхронно
+        }
+
+        // Получение количества товаров
+        private static int[] GetItemsCount(AppState appState)
+        {
+            return appState.Goods?
+                .Select(goods => goods.Quantity)
+                .Take(5)
+                .ToArray() ?? [];
         }
     }
 }

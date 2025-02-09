@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using WarehouseApp.Services;
 
 namespace WarehouseApp.ViewModel
 {
@@ -9,19 +8,33 @@ namespace WarehouseApp.ViewModel
 
         public HistoryPageViewModel()
         {
-            Items = new ObservableCollection<HistoryCardViewModel>(
-                AppState.Instance.Goods
-                .Select(goods => new HistoryCardViewModel(goods))
-            );
+            Items = new ObservableCollection<HistoryCardViewModel>();
         }
 
-        public void RefreshItems()
+        // Асинхронный метод для загрузки элементов
+        public async Task LoadItemsAsync()
         {
+            var appState = await AppState.GetInstanceAsync(); // Получаем инстанс AppState асинхронно
+
+            var updatedItems = appState.Goods?
+                .Select(goods => new HistoryCardViewModel(goods)) ?? Enumerable.Empty<HistoryCardViewModel>();
+
             Items.Clear();
+            foreach (var item in updatedItems)
+            {
+                Items.Add(item);
+            }
+        }
 
-            var updatedItems = AppState.Instance.Goods
-                .Select(goods => new HistoryCardViewModel(goods));
+        // Асинхронный метод для обновления элементов
+        public async Task RefreshItemsAsync()
+        {
+            var appState = await AppState.GetInstanceAsync(); // Получаем инстанс AppState асинхронно
 
+            var updatedItems = appState.Goods?
+                .Select(goods => new HistoryCardViewModel(goods)) ?? Enumerable.Empty<HistoryCardViewModel>();
+
+            Items.Clear();
             foreach (var item in updatedItems)
             {
                 Items.Add(item);

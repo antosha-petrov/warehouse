@@ -1,35 +1,45 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using WarehouseApp.Services;
 
-namespace WarehouseApp.ViewModel;
-
-public class MainPageViewModel
+namespace WarehouseApp.ViewModel
 {
-    public ObservableCollection<CardViewModel> Items { get; }
-
-    public MainPageViewModel()
+    public class MainPageViewModel
     {
-        Items = new ObservableCollection<CardViewModel>(
-            AppState.Instance.Goods
-            .Select(goods => new CardViewModel(goods))
-        );
+        public ObservableCollection<CardViewModel> Items { get; }
+        public ICommand NavigateToOrder { get; }
 
-        NavigateToOrder = new Command(() => Shell.Current.GoToAsync("//Order"));
-    }
-
-    public void RefreshItems()
-    {
-        Items.Clear();
-
-        var updatedItems = AppState.Instance.Goods
-            .Select(goods => new CardViewModel(goods));
-
-        foreach (var item in updatedItems)
+        public MainPageViewModel()
         {
-            Items.Add(item);
+            Items = new ObservableCollection<CardViewModel>();
+            NavigateToOrder = new Command(() => Shell.Current.GoToAsync("//Order"));
+        }
+
+        // Асинхронный метод для загрузки элементов
+        public async Task LoadItemsAsync()
+        {
+            var appState = await AppState.GetInstanceAsync(); // Получаем инстанс AppState асинхронно
+
+            var updatedItems = appState.Goods?.Select(goods => new CardViewModel(goods)) ?? Enumerable.Empty<CardViewModel>();
+
+            Items.Clear();
+            foreach (var item in updatedItems)
+            {
+                Items.Add(item);
+            }
+        }
+
+        // Асинхронный метод для обновления элементов
+        public async Task RefreshItemsAsync()
+        {
+            var appState = await AppState.GetInstanceAsync(); // Получаем инстанс AppState асинхронно
+
+            var updatedItems = appState.Goods?.Select(goods => new CardViewModel(goods)) ?? Enumerable.Empty<CardViewModel>();
+
+            Items.Clear();
+            foreach (var item in updatedItems)
+            {
+                Items.Add(item);
+            }
         }
     }
-
-    public ICommand NavigateToOrder { get; }
 }

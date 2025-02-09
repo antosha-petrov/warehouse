@@ -1,9 +1,10 @@
 ﻿using System.Windows.Input;
 using WarehouseApp.ViewModel;
+using Models; 
 
 public class CardViewModel : ViewModelBase
 {
-    private readonly WarehouseApp.Model.Component linkedComponent;
+    private readonly OrderItem linkedComponent;
 
     public int Quantity 
     {
@@ -15,11 +16,11 @@ public class CardViewModel : ViewModelBase
         }
     }
 
-    public string ImageSource => linkedComponent.ImageSource;
+    public string ImageSource => linkedComponent.Goods.ImageSource;
 
-    public string Title => linkedComponent.Name;
+    public string Title => linkedComponent.Goods.Name;
 
-    public CardViewModel(WarehouseApp.Model.Component linkedComponent)
+    public CardViewModel(OrderItem linkedComponent)
     {
         this.linkedComponent = linkedComponent;
 
