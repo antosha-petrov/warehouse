@@ -11,6 +11,31 @@ namespace Warehouse.Backend.Controllers
     {
         private readonly WarehouseState _warehouseState = warehouseState;
 
+        [Route("get/app")]
+        [HttpGet]
+        public ActionResult<Order> GetLastOrderForApp()
+        {
+            if (_warehouseState.OrderList.Last().Status != "FinishAndLoc")
+            {
+                return BadRequest(new { message = "Ошибка запроса", code = 400 });
+            }
+
+            return _warehouseState.OrderList.Last();
+        }
+
+        [Route("get/robot")]
+        [HttpGet]
+        public ActionResult<Order> GetLastOrderForRobot()
+        {
+            if (_warehouseState.OrderList.Last().Status != "InProgress")
+            {
+                return BadRequest(new { message = "Ошибка запроса", code = 400 });
+            }
+
+            return _warehouseState.OrderList.Last();
+        }
+
+        [Route("get")]
         [HttpGet]
         public ActionResult<Order> GetLastOrder()
         {
@@ -61,6 +86,18 @@ namespace Warehouse.Backend.Controllers
             itemToUpdate.Rack = request.Locations[0];
             itemToUpdate.Cell = request.Locations[1];
             itemToUpdate.Shelf = request.Locations[2];
+
+
+            int j = 0;
+
+            if (j == 0)
+            {
+                lastOrder.Status = "FinishAndLoc";
+            }
+            else
+            {
+                lastOrder.Status = "Finish";
+            }
 
             return lastOrder;
         }

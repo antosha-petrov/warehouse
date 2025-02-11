@@ -10,7 +10,7 @@ public class AppState
 
     private AppState()
     {
-        _httpClient = new HttpClient { BaseAddress = new Uri("http://192.168.0.91:5298/") };
+        _httpClient = new HttpClient { BaseAddress = new Uri("http://Honor:5298/") };
     }
 
     public static async Task<AppState> GetInstanceAsync()
