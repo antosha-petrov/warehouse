@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WarehouseApp.ThanksForOrder"
+             Title="Спасибо за заказ!"
+             xmlns:vm="clr-namespace:WarehouseApp.ViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+
+    <!-- Установка цвета и стиля строки состояния -->
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="White" StatusBarStyle="DarkContent" />
+    </ContentPage.Behaviors>
+
+    <!-- Установка заголовка страницы -->
+    <Shell.TitleView>
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Label Text="Спасибо за заказ!  " FontSize="28" HorizontalOptions="Center" TextColor="#512BD4" FontAttributes="Bold"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+    
+    <ContentPage.BindingContext>
+        <vm:ThankForOrderViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout>
+        <!-- Кнрпка для перехода в корзину -->
+        <Border Margin="15,0,15,15">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="20"/>
+            </Border.StrokeShape>
+            <Button Command="{Binding NavigateToMain}" Text="На главную" FontSize="24" TextColor="#DFD8F7" HorizontalOptions="FillAndExpand" />
+        </Border>
+    </VerticalStackLayout>
+</ContentPage>

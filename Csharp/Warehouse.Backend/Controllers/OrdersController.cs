@@ -124,6 +124,8 @@ namespace Warehouse.Backend.Controllers
                 lastOrder.Items[i].Quantity = nums[i];
             }
 
+            lastOrder.Status = "InProgress";
+
             return lastOrder;
         }
     }

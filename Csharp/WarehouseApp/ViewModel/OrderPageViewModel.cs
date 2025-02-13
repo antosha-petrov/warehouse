@@ -52,6 +52,9 @@ namespace WarehouseApp.ViewModel
             var appState = await AppState.GetInstanceAsync(); // Получаем инстанс AppState асинхронно
             var quantities = GetItemsCount(appState);
             await appState.EditOrderAsync(quantities); // Создаем заказ асинхронно
+
+            await Shell.Current.GoToAsync("//Thanks");
+
         }
 
         // Получение количества товаров

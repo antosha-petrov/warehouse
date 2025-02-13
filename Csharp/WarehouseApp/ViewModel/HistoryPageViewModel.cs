@@ -19,17 +19,19 @@ namespace WarehouseApp.ViewModel
         private async Task CheckLock()
         {
             var appState = await AppState.GetInstanceAsync(); // Получаем инстанс AppState асинхронно
-            
-            foreach (var item in appState.Goods!)
+            if (appState.Goods != null)
             {
-                var matchingOrderItem = Items.FirstOrDefault(o => o.Title == item.Goods.Name);
-                if (matchingOrderItem != null)
+                foreach (var item in appState.Goods!)
                 {
-                    matchingOrderItem.Shelf = item.Shelf;
-                    matchingOrderItem.Cell = item.Cell;
-                    matchingOrderItem.Rack = item.Rack;
+                    var matchingOrderItem = Items.FirstOrDefault(o => o.Title == item.Goods.Name);
+                    if (matchingOrderItem != null)
+                    {
+                        matchingOrderItem.Shelf = item.Shelf;
+                        matchingOrderItem.Cell = item.Cell;
+                        matchingOrderItem.Rack = item.Rack;
+                    }
                 }
-            }
+            }  
         }
 
         // Асинхронный метод для загрузки элементов

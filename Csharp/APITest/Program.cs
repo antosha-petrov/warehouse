@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 class Program
 {
-    private static readonly HttpClient _httpClient = new() { BaseAddress = new Uri("http://192.168.1.56:5298/") };
+    private static readonly HttpClient _httpClient = new() { BaseAddress = new Uri("http://Honor:5298/") };
 
     static async Task Main()
     {
