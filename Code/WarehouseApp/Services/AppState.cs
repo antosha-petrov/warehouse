@@ -15,7 +15,7 @@ public class AppState
 
     private AppState()
     {
-        _httpClient = new HttpClient { BaseAddress = new Uri("http://192.168.1.57:5298/") };
+        _httpClient = new HttpClient { BaseAddress = new Uri("http://192.168.135.124:5298/") };
         _timer = new Timer(async _ => await RefreshStatus(), null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
     }
 
@@ -80,7 +80,7 @@ public class AppState
     {
         try
         {
-            var appState = await AppState.GetInstanceAsync();
+            var appState = await GetInstanceAsync();
 
             if (appState.Goods != null)
             {
@@ -99,6 +99,8 @@ public class AppState
                         item.Rack = matchingOrderItem.Rack;
                     }
                 }
+
+                HttpResponseMessage LastResponse = await _httpClient.GetAsync("orders/put/done");
             }
         }
         catch (Exception ex)
