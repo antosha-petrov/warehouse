@@ -9,7 +9,6 @@
 
     <TabBar>
         <ShellContent Icon="home_icone.png" Route="Main" ContentTemplate="{DataTemplate local:MainPage}"/>
-        <ShellContent Icon="map_icon.png" Route="Map" ContentTemplate="{DataTemplate local:HistoryPage}"/>
         <ShellContent Icon="order_icone.png" Route="Order" ContentTemplate="{DataTemplate local:OrderPage}"/>
     </TabBar>
 

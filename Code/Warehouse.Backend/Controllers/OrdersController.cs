@@ -10,7 +10,6 @@ namespace Warehouse.Backend.Controllers
     public class OrdersController(WarehouseState warehouseState) : ControllerBase
     {
         private readonly WarehouseState _warehouseState = warehouseState;
-        private int counter = 0;
 
         [Route("get")]
         [HttpGet]
@@ -88,42 +87,6 @@ namespace Warehouse.Backend.Controllers
 
             lastOrder.Status = "InProgress";
 
-            return lastOrder;
-        }
-
-        [Route("update/loc")]
-        [HttpPut]
-        public ActionResult<Order> UpdateItemsLocation([FromBody] UpdateLocationRequest request)
-        {
-            if (request.Locations.Length != 3)
-            {
-                return BadRequest("Массив должен содержать ровно 3 числа.");
-            }
-
-            if (_warehouseState.OrderList.Count == 0)
-            {
-                return NotFound("Заказов нет.");
-            }
-
-            var lastOrder = _warehouseState.OrderList.Last();
-            var itemToUpdate = lastOrder.Items.FirstOrDefault(item => item.Goods.Name == request.GoodsName);
-
-            if (itemToUpdate == null)
-            {
-                return NotFound("Товар с таким именем не найден в последнем заказе.");
-            }
-
-            itemToUpdate.Rack = request.Locations[0];
-            itemToUpdate.Cell = request.Locations[1];
-            itemToUpdate.Shelf = request.Locations[2];
-
-            if (counter > 3)
-            {
-                counter = 0;
-                lastOrder.Status = "LocationInfo";
-            }
-
-            counter++;
             return lastOrder;
         }
 

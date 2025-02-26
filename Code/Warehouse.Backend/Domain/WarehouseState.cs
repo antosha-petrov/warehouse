@@ -18,7 +18,8 @@ namespace Warehouse.Backend.Domain
                 new GoodsItem("Болт", "img/bolt.png"),
                 new GoodsItem("Гайка", "img/gayki.png"),
                 new GoodsItem("Брусок", "img/brusok.png"),
-                new GoodsItem("Шайба", "img/shayba.png")
+                new GoodsItem("Шайба", "img/shayba.png"),
+                new GoodsItem("Барашек", "img/barashek.png")
             };
         }
     }

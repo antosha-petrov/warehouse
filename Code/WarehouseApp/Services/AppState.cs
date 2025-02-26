@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using System.Text;
+﻿using System.Text;
 using Models;
 using Newtonsoft.Json;
 
@@ -9,14 +8,9 @@ public class AppState
     private static readonly object _lock = new();
     private readonly HttpClient _httpClient;
 
-#pragma warning disable IDE0052
-    private readonly Timer _timer;
-#pragma warning restore IDE0052
-
     private AppState()
     {
         _httpClient = new HttpClient { BaseAddress = new Uri("http://192.168.135.124:5298/") };
-        _timer = new Timer(async _ => await RefreshStatus(), null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
     }
 
     public static async Task<AppState> GetInstanceAsync()
@@ -74,38 +68,5 @@ public class AppState
     {
         var content = new StringContent(JsonConvert.SerializeObject(nums), Encoding.UTF8, "application/json");
         return await _httpClient.PutAsync("orders/update/count", content);
-    }
-
-    private async Task RefreshStatus()
-    {
-        try
-        {
-            var appState = await GetInstanceAsync();
-
-            if (appState.Goods != null)
-            {
-                HttpResponseMessage response = await _httpClient.GetAsync("orders/get/app");
-                response.EnsureSuccessStatusCode();
-                var _lastOrder = await response.Content.ReadFromJsonAsync<Order>();
-                if (_lastOrder == null || _lastOrder.Items == null) return;
-
-                foreach (var item in appState.Goods!)
-                {
-                    var matchingOrderItem = _lastOrder.Items.FirstOrDefault(o => o.Goods.Name == item.Goods.Name);
-                    if (matchingOrderItem != null)
-                    {
-                        item.Shelf = matchingOrderItem.Shelf;
-                        item.Cell = matchingOrderItem.Cell;
-                        item.Rack = matchingOrderItem.Rack;
-                    }
-                }
-
-                HttpResponseMessage LastResponse = await _httpClient.GetAsync("orders/put/done");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
     }
 }
