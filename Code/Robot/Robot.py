@@ -6,17 +6,26 @@ import cv2
 import os
 import time
 import serial
+from pyzbar.pyzbar import decode
+from PIL import Image
+import math
 
+# Адреса для подключения к серверу
 URL = "http://192.168.135.124:5298/orders/get/robot"
 UPDATE_URL = "http://192.168.135.124:5298/orders/update/loc"
 
-case_out = 0 # 1/2/3 Контейнер для выгрузки
+# 1/2/3 Контейнер для выгрузки
+case_out = 0
 
+# Основные глобальные переменные для доступа из любых частей приложения
 qr_data = None
 order_matrix = None
-ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
-ser.flush()
 
+# Инициализация
+ser = serial.Serial('/dev/ttyUSB0', 9600)
+time.sleep(2)
+
+# Перечень используемых портов GPIO
 GPIO.setmode(GPIO.BCM)
 TRIG_FRONT_LEFT = 23
 ECHO_FRONT_LEFT = 24
@@ -31,6 +40,7 @@ ECHO_ARM = 3
 LOWER_LOW_MOTOR = 13
 HIGH_LOW_MOTOR = 19
 
+# Настройка GPIO портов
 GPIO.setup(TRIG_FRONT_RIGHT, GPIO.OUT)
 GPIO.setup(ECHO_FRONT_RIGHT, GPIO.IN)
 GPIO.setup(TRIG_FRONT_LEFT, GPIO.OUT)
@@ -42,24 +52,47 @@ GPIO.setup(ECHO_BACK_LEFT, GPIO.IN)
 GPIO.setup(LOWER_LOW_MOTOR, GPIO.OUT)
 GPIO.setup(HIGH_LOW_MOTOR, GPIO.OUT)
 
-# Настроим Raspberry Pi
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(TRIGGER_PIN, GPIO.OUT)
-GPIO.setup(ECHO_PIN, GPIO.IN)
-
-SERVO_PINS = [17, 18, 27, 22]  # GPIO-пины для сервоприводов
+# Настройка подключения сервоприводов
+SERVO_PINS = [17, 18, 27, 22]
 GPIO.setup(SERVO_PINS, GPIO.OUT)
 
 # Инициализация PWM для сервоприводов
-SERVO_FREQ = 50  # Частота PWM для сервоприводов (50 Гц)
+SERVO_FREQ = 50
 servos = [GPIO.PWM(pin, SERVO_FREQ) for pin in SERVO_PINS]
 for servo in servos:
-    servo.start(0)  # Запуск PWM с нулевым коэффициентом заполнен
+    servo.start(0)
+
+
+# Класс для управления сервами
+class MultiServoController:
+    def __init__(self, pins=[17, 18, 27, 22], freq=50):
+        self.pins = pins
+        self.servos = []
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+
+        # Инициализация всех сервоприводов
+        for pin in self.pins:
+            GPIO.setup(pin, GPIO.OUT)
+            pwm = GPIO.PWM(pin, freq)
+            pwm.start(0)
+            self.servos.append(pwm)
+
+    # Установка сервоприводов
+    def set_angle(self, servo_num, angle):
+        angle = max(0, min(180, angle))
+        duty = 2.5 + (angle / 180) * 10
+        self.servos[servo_num].ChangeDutyCycle(duty)
+        sleep(0.3)
+
+
+# Контроллер сервоприводов
+controller = MultiServoController()
 
 
 # Получение данных о заказах
 async def fetch_order(session):
-    """Получение данных о заказах."""
     try:
         async with session.get(URL) as response:
             if response.status == 200:
@@ -72,7 +105,6 @@ async def fetch_order(session):
 
 # Обработка данных о заказе
 async def process_order():
-    """Обработка данных о заказах."""
     global order_matrix
     async with aiohttp.ClientSession() as session:
         while True:
@@ -87,7 +119,7 @@ async def process_order():
             await asyncio.sleep(2)
 
 
-# Завершение заказа
+# Перевод заказа в статус завершен
 async def put_order_done():
     url = "http://192.168.135.124:5298/orders/put/done"
     async with aiohttp.ClientSession() as session:
@@ -95,9 +127,8 @@ async def put_order_done():
             return await response.text()
 
 
-# Фильтрация матрицы
+# Фильтрация полученной матрицы заказов
 async def filter_order_matrix():
-    """Фильтрация матрицы заказов по количеству товаров."""
     global order_matrix
     if order_matrix is not None and order_matrix.size > 0:
         order_matrix = np.array([
@@ -108,81 +139,96 @@ async def filter_order_matrix():
         print("order_matrix пуст или None, фильтрация не выполнена.")
 
 
-# Работа с физическими элементами
+# Отправка напряжений для моторов
 def send_to_arduino(v1, v2, v3, v4):
     global ser
-    """Отправка команд на Arduino"""
-    try:
-        with ser:
-            # Формируем строку данных
-            data = f"{v1},{v2},{v3},{v4}\n"
-            serv.write(data.encode())
-            print(f"Sent: {data.strip()}")
-    except Exception as e:
-        print(f"Ошибка:{e}")
+
+    # Формируем строку данных
+    data = f"{v1},{v2},{v3},{v4}\n"
+
+    # Отправляем данные
+    ser.write(data.encode())
+    print(f"Sent: {data.strip()}")
+
+
+# Установка углов на сервы
 def set_servo_angle(servo_id, angle):
     """Установка угла для сервопривода"""
+    global controller
+
     if 0 <= servo_id < len(servos) and 0 <= angle <= 180:
-        duty_cycle = (angle / 18) + 2  # Преобразование угла в коэффициент заполнения
-        servos[servo_id].ChangeDutyCycle(duty_cycle)
-        time.sleep(0.1)  # Даем сервоприводу время на перемещение
+        controller.set_angle(servo_id, angle)
     else:
         print(f"Ошибка: Недопустимый servo_id или angle")
-def measure_distance(trig, echo):
-    """Измерение расстояния с медианным фильтром"""
-    distances = []
-    for _ in range(3):
-        GPIO.output(trig, True)
-        time.sleep(0.00001)
-        GPIO.output(trig, False)
 
+
+# Чтение ультразвуковых датчиков
+def measure_distance(TRIG, ECHO):
+    # Убедимся, что пин TRIG в низком состоянии
+    GPIO.output(TRIG, False)
+    time.sleep(0.1)
+
+    pulse_end = None
+    pulse_start = None
+
+    # Запускаем ультразвуковой сигнал
+    GPIO.output(TRIG, True)
+    time.sleep(0.00001)  # Подаем импульс на 10 микросекунд
+    GPIO.output(TRIG, False)
+
+    # Засекаем время, которое требуется эхо, чтобы вернуться
+    while GPIO.input(ECHO) == 0:
         pulse_start = time.time()
-        while GPIO.input(echo) == 0:
-            pulse_start = time.time()
 
+    while GPIO.input(ECHO) == 1:
         pulse_end = time.time()
-        while GPIO.input(echo) == 1:
-            pulse_end = time.time()
 
-        distances.append((pulse_end - pulse_start) * 17150)
+    # Расстояние рассчитывается по формуле:
+    pulse_duration = pulse_end - pulse_start
+    distance = pulse_duration * 17150  # 17150 — это скорость звука в см/с
+    distance = round(distance, 2)  # Округляем до 2 знаков после запятой
 
-    return sorted(distances)[1]
+    return distance
 
 
 # Поворот
 def turn(degrees):
-    """Поворот на заданное количество градусов"""
-    speed = 89  # Градус/секунда
+    speed = 32  # Градус/секунда
+    duration = abs(degrees) / speed  # Время поворота
 
+    # Определяем направление поворота
     if degrees > 0:
-        start_time = time.time()
-        while time.time() - start_time < degrees / speed:  # Поворот на 180 градусов (время подбирается экспериментально)
-            send_to_arduino(255, 255, -255, -255)  # Поворот направо
+        send_to_arduino(70, 70, -70, -70)  # Поворот вправо
     else:
-        start_time = time.time()
-        while time.time() - start_time < degrees / speed:  # Поворот на 180 градусов (время подбирается экспериментально)
-            send_to_arduino(-255, -255, 255, 255)  # Поворот направо
+        send_to_arduino(-70, -70, 70, 70)  # Поворот влево
 
-    send_to_arduino(0, 0, 0, 0)
+    time.sleep(duration)  # Ждем завершения поворота
+    send_to_arduino(0, 0, 0, 0)  # Остановка
+    sleep(0.1)
 
 
 # Движение
 def move(side, length):
-    """Движение по заданному расстоянию"""
     speed = 60  # Сантиметр/секунда
-    start_time = time.time()
-    while time.time() - start_time < length / speed:
-        match side:
-            case "forward":
-                send_to_arduino(255, 255, 255, 255)
-            case "back":
-                send_to_arduino(-255, -255, -255, -255)
-            case "left":
-                send_to_arduino(-255, 255, 255, -255)
-            case "right":
-                send_to_arduino(255, -255, -255, 255)
+    duration = length / speed
+
+    match side:
+        case "forward":
+            send_to_arduino(255, 255, 255, 255)
+        case "back":
+            send_to_arduino(-255, -255, -255, -255)
+        case "left":
+            send_to_arduino(-255, 255, 255, -255)
+        case "right":
+            send_to_arduino(255, -255, -255, 255)
+
+    sleep(duration)
+
+    if side == "left" or "right":
+        sleep(0.15)
 
     send_to_arduino(0, 0, 0, 0)
+    sleep(0.1)
 
 
 # Движение по ультразвуковым датчикам
@@ -221,12 +267,16 @@ def move_ultrasonic_sensor(side, expression, value):
                     while measure_distance(TRIG_FRONT_LEFT, ECHO_FRONT_LEFT) <= value:
                         send_to_arduino(255, -255, -255, 255)
 
+
+    if side == "left" or "right":
+        sleep(0.17)
+
     send_to_arduino(0, 0, 0, 0)  # Остановка перед следующим этапом
+    sleep(0.1)
 
 
 # Движение на старт
 def go_start_position():
-    """Движение на стартовую позицию"""
     move_ultrasonic_sensor("forward", "more", 20)
     move_ultrasonic_sensor("left", "less", 20)
     move_ultrasonic_sensor("forward", "more", 20)
@@ -235,7 +285,6 @@ def go_start_position():
 
 # Движение на финиш
 def go_finish_position():
-    """"Логика движения на выгрузку"""
     turn(90)
     move_ultrasonic_sensor("forward", "more", 20)
     move("right", 145)
@@ -248,7 +297,6 @@ def go_finish_position():
 
 # Движение к ряду
 async def go_rack(rack_number):
-    """Движение к ряду"""
     match rack_number:
         case 1:
             turn(-90)
@@ -256,7 +304,7 @@ async def go_rack(rack_number):
             move_ultrasonic_sensor("forward", "more", 30)
             move_ultrasonic_sensor("back", "less", 30)
             for i in [1, 2, 3]:
-                cell()
+                await cell()
                 if i != 3:
                     move("right", 30)
         case 2:
@@ -264,7 +312,7 @@ async def go_rack(rack_number):
             move_ultrasonic_sensor("forward", "more", 30)
             move_ultrasonic_sensor("back", "less", 30)
             for i in [1, 2, 3]:
-                cell()
+                await cell()
                 if i != 3:
                     move("right", 30)
         case 3:
@@ -277,31 +325,34 @@ async def go_rack(rack_number):
             move_ultrasonic_sensor("forward", "more", 30)
             move_ultrasonic_sensor("back", "less", 30)
             for i in [1, 2, 3]:
-                cell()
+                await cell()
                 if i != 3:
                     move("left", 30)
 
 
 # Обработка заказов в конкретной ячейке
 async def cell():
-    """Обработка заказов в конкретной ячейке."""
     for i in [1, 2]:
         if i == 1:
-            set_servo_angle(0, 150)
-            set_servo_angle(1, 60)
-            set_servo_angle(2, 90)
-            set_servo_angle(3, 40)
-        else:
             set_servo_angle(0, 80)
+            sleep(0.3)
             set_servo_angle(1, 70)
+            sleep(0.3)
             set_servo_angle(2, 165)
-            set_servo_angle(3, 80)
+            set_servo_angle(3, 120)
+        else:
+            set_servo_angle(0, 150)
+            sleep(0.3)
+            set_servo_angle(1, 60)
+            sleep(0.3)
+            set_servo_angle(2, 90)
+            set_servo_angle(3, 120)
 
         read_qr_code()
         if str(qr_data).lower in order_matrix[:, 0]:
             index = np.where(order_matrix[:, 0] == qr_data)[0][0]
             count = order_matrix[index, 1]
-            get_object(count, i, index, str(qr_data).lower)
+            await get_object(count, i, index, str(qr_data).lower)
 
 
 # Взятие объекта
@@ -312,29 +363,29 @@ async def get_object(count, shelf, index, name):
         if track_lr() == "Non object":
             break
 
-        set_servo_angle(3, 80)
+        set_servo_angle(3, 120)
         if shelf == 1:
             if track_lr("корзина") == "Non object":
                 track_lr(name)
-                theta1, theta2 = calculate_extension(150, 60, get_distance())
+                theta1, theta2 = calculate_extension(80, 70, 165, get_distance())
                 set_servo_angle(0, theta1)
                 set_servo_angle(1, theta2)
             else:
-                theta1, theta2 = calculate_extension(150, 60, 5)
+                theta1, theta2 = calculate_extension(80, 70, 165,  5)
                 set_servo_angle(0, theta1)
                 set_servo_angle(1, theta2)
-                set_servo_angle(2, 30)
+                set_servo_angle(2, 40)
                 track_lr(name)
-                theta1, theta2 = calculate_extension(150, 60, get_distance())
+                theta1, theta2 = calculate_extension(theta1, theta2, 40,  get_distance())
                 set_servo_angle(0, theta1)
                 set_servo_angle(1, theta2)
         else:
             track_lr(name)
-            theta1, theta2 = calculate_extension(80, 70, get_distance())
+            theta1, theta2 = calculate_extension(150, 60, 90, get_distance())
             set_servo_angle(0, theta1)
             set_servo_angle(1, theta2)
 
-        time.sleep(1)
+        time.sleep(0.3)
         set_servo_angle(3, 0)
         put_bag(shelf)
 
@@ -346,34 +397,66 @@ async def get_object(count, shelf, index, name):
 
 
 # Подсчет удлинения
-def calculate_extension(theta1, theta2, L):
-    """
-    Вычисляет новые углы theta1' и theta2' для удлинения вперед на L, сохраняя высоту.
+def calculate_extension(theta1, theta2, theta3, d):
+    # Длины плеч
+    L1, L2 = 23, 17
 
-    theta1, theta2 - текущие углы (в градусах)
-    L - требуемое удлинение
-    """
-    # Длины плеч фиксированы
-    l1 = 23  # горизонтальное плечо
-    l2 = 17  # вертикальное плечо
+    # Преобразуем углы в радианы
+    theta1 = math.radians(theta1)
+    theta2 = math.radians(theta2)
+    theta3 = math.radians(theta3)
 
-    theta1 = np.radians(theta1)
-    theta2 = np.radians(theta2)
+    # Текущие координаты конца второго плеча
+    X = L1 * math.cos(theta1) + L2 * math.cos(theta1 + theta2)
+    Y = L1 * math.sin(theta1) + L2 * math.sin(theta1 + theta2)
 
-    # Численный метод решения
-    result = np.linalg.solve(np.array([
-        [-l1 * np.sin(theta1), -l2 * np.sin(theta2)],
-        [l1 * np.cos(theta1), l2 * np.cos(theta2)]
-    ]), np.array([-L, 0]))
+    # Смещение вдоль направления третьего плеча
+    X_new = X + d * math.cos(theta1 + theta2 + theta3)
+    Y_new = Y + d * math.sin(theta1 + theta2 + theta3)
 
-    theta1_new, theta2_new = theta1 + result[0], theta2 + result[1]
+    # Новый угол theta2'
+    cos_theta2_new = (X_new ** 2 + Y_new ** 2 - L1 ** 2 - L2 ** 2) / (2 * L1 * L2)
+    theta2_new = math.acos(cos_theta2_new)
 
-    return np.degrees(theta1_new), np.degrees(theta2_new)
+    # Новый угол theta1'
+    theta1_new = math.atan2(Y_new, X_new) - math.atan2(L2 * math.sin(theta2_new), L1 + L2 * math.cos(theta2_new))
+
+    # Преобразуем обратно в градусы
+    theta1_new = math.degrees(theta1_new)
+    theta2_new = math.degrees(theta2_new)
+
+    return theta1_new, theta2_new
+
+
+# Кладем деталь в корзину
+def put_bag(shelf):
+    if shelf == 2:
+        set_servo_angle(0, 140)
+        sleep(0.3)
+        set_servo_angle(1, 180)
+        sleep(0.3)
+        set_servo_angle(2, 40)
+        move_ultrasonic_sensor("back", "more", 10)
+        set_servo_angle(1, 30)
+        set_servo_angle(3, 140)
+        set_servo_angle(1, 60)
+        move_ultrasonic_sensor("forward", "less", 30)
+        move_ultrasonic_sensor("forward", "more", 30)
+    else:
+        move_ultrasonic_sensor("back", "more", 10)
+        set_servo_angle(0, 140)
+        sleep(0.3)
+        set_servo_angle(1, 30)
+        sleep(0.3)
+        set_servo_angle(2, 40)
+        set_servo_angle(3, 140)
+        set_servo_angle(1, 60)
+        move_ultrasonic_sensor("forward", "less", 30)
+        move_ultrasonic_sensor("forward", "more", 30)
 
 
 # Выгрузка
 def discharge(box):
-    """Логика выгрузки товаров из корзины"""
     match box:
         case 1:
             move("left", 13)
@@ -382,77 +465,54 @@ def discharge(box):
         case 3:
             move("right", 13)
 
-    GPIO.output(HIGH_LOW_MOTOR, GPIO.HIGH)
-    sleep(8)
-    GPIO.output(HIGH_LOW_MOTOR, GPIO.LOW)
-    set_servo_angle(0, 140)
+    # Складываемся и опускаемся вниз
+    set_servo_angle(0, 150)
     set_servo_angle(1, 30)
-    set_servo_angle(3, 80)
+    set_servo_angle(2, 40)
+    set_servo_angle(3, 120)
     GPIO.output(LOWER_LOW_MOTOR, GPIO.HIGH)
     sleep(8)
     GPIO.output(LOWER_LOW_MOTOR, GPIO.LOW)
 
-
+    # Выравниваемся
     while track_servo() != "Non object":
-        theta1, theta2 = calculate_extension(140, 30, get_distance())
-
+        # Выдвигаемся
+        theta1, theta2 = calculate_extension(150, 30, 40, get_distance())
         set_servo_angle(0, theta1)
         set_servo_angle(1, theta2)
-        sleep(0.5)
+        sleep(0.3)
+
+        # Хватаем и поднимаемся
         set_servo_angle(3, 0)
         GPIO.output(HIGH_LOW_MOTOR, GPIO.HIGH)
         sleep(8)
         GPIO.output(HIGH_LOW_MOTOR, GPIO.LOW)
 
-        set_servo_angle(0, 80)
-        set_servo_angle(1, 70)
-        set_servo_angle(2, 165)
+        # Подносим на уровне корзины
+        set_servo_angle(0, 150)
+        set_servo_angle(1, 60)
+        set_servo_angle(2, 90)
 
+        # Подъезжаем, опускаем и отъезжаем
         move("forward", 25)
         set_servo_angle(3, 80)
         sleep(0.5)
         move("back", 25)
 
-
+        # Складываемся
         set_servo_angle(0, 140)
-        set_servo_angle(1, 30)
-        set_servo_angle(3, 80)
+        set_servo_angle(2, 40)
+        set_servo_angle(1, 60)
+        set_servo_angle(3, 120)
+
+        # Опускаемся
         GPIO.output(LOWER_LOW_MOTOR, GPIO.HIGH)
         sleep(8)
         GPIO.output(LOWER_LOW_MOTOR, GPIO.LOW)
 
 
-# Кладем деталь в корзину
-def put_bag(shelf):
-    if shelf == 2:
-        set_servo_angle(0, 140)
-        set_servo_angle(1, 180)
-        set_servo_angle(3, 90)
-        move_ultrasonic_sensor("back", "more", 10)
-        GPIO.output(HIGH_LOW_MOTOR, GPIO.HIGH)
-        sleep(8)
-        GPIO.output(HIGH_LOW_MOTOR, GPIO.LOW)
-        set_servo_angle(1, 30)
-        set_servo_angle(3, 140)
-        set_servo_angle(1, 60)
-        move_ultrasonic_sensor("forward", "less", 30)
-        move_ultrasonic_sensor("forward", "more", 30)
-    else:
-        move_ultrasonic_sensor("back", "more", 10)
-        GPIO.output(HIGH_LOW_MOTOR, GPIO.HIGH)
-        sleep(8)
-        GPIO.output(HIGH_LOW_MOTOR, GPIO.LOW)
-        set_servo_angle(0, 140)
-        set_servo_angle(1, 30)
-        set_servo_angle(3, 140)
-        set_servo_angle(1, 60)
-        move_ultrasonic_sensor("forward", "less", 30)
-        move_ultrasonic_sensor("forward", "more", 30)
-
-
-# Позиционирование на детали
+# Позиционирование на детали на полке
 def track_lr(name=None):
-    """Отслеживание и центрирование ближайшего объекта в кадре."""
     reference_folder = "/home/rjd/rzd"
     match name:
         case "прокладки":
@@ -495,7 +555,7 @@ def track_lr(name=None):
         return "Non object"
 
     matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=False)
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture("gst-launch-1.0 libcamerasrc ! videoconvert ! autovideosink")
     frame_counter = 0
 
     while cap.isOpened():
@@ -551,9 +611,8 @@ def track_lr(name=None):
     return "Non object"  # Вернется только, если программа завершится без объектов
 
 
-# Поиск деталей в корзине
+# Позиционирование на детали в корзине
 def track_servo():
-    """Отслеживание объекта и центрирование с помощью сервопривода."""
     reference_folder = "/home/rjd/rzd"
     scale_factor = 0.6
     max_keypoints = 150
@@ -562,7 +621,7 @@ def track_servo():
     center_tolerance = 30  # Точность центрирования
 
     servo_id = 2
-    servo_angle = 90  # Начальный угол сервопривода
+    servo_angle = 40  # Начальный угол сервопривода
     angle_step = 5  # Шаг изменения угла
 
     orb = cv2.ORB_create(nfeatures=max_keypoints)
@@ -581,7 +640,7 @@ def track_servo():
         return "Non object"
 
     matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=False)
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture("gst-launch-1.0 libcamerasrc ! videoconvert ! autovideosink")
     frame_counter = 0
 
     while cap.isOpened():
@@ -639,25 +698,28 @@ def track_servo():
 
 # Чтение qr-code
 def read_qr_code():
-    """Функция для считывания QR-кода и сохранения данных в переменную"""
     global qr_data
 
-    cap = cv2.VideoCapture(0)  # Здесь 0 — индекс основной камеры
-    detector = cv2.QRCodeDetector()
+    cap = cv2.VideoCapture("gst-launch-1.0 libcamerasrc ! videoconvert ! autovideosink")
 
     while True:
         ret, frame = cap.read()
         if not ret:
             break
 
-        data, bbox, _ = detector.detectAndDecode(frame)
-        if data:
-            qr_data = data
+        qr_codes = decode(frame)
+        for qr in qr_codes:
+            qr_data = qr.data.decode("utf-8")
             print(f"QR-код считан: {qr_data}")
+            break
 
-        time.sleep(0.1)  # Небольшая задержка для снижения нагрузки на CPU
+        cv2.imshow("QR Scanner", frame)
+
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
 
     cap.release()
+    cv2.destroyAllWindows()
 
 
 #  Получаем расстояние до детали
@@ -677,9 +739,12 @@ async def main():
     await filter_order_matrix()
 
     go_start_position()
+    GPIO.output(HIGH_LOW_MOTOR, GPIO.HIGH)
+    sleep(8)
+    GPIO.output(HIGH_LOW_MOTOR, GPIO.LOW)
 
     for i in [1, 2, 3]:
-        go_rack(i)
+        await go_rack(i)
 
     go_finish_position()
     discharge(case_out)
